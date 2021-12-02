@@ -1,19 +1,23 @@
 #!/usr/bin/python3
 
+FORWARD = 'forward'
+DOWN = 'down'
+UP = 'up'
+
 def execute_move(instructions):
 	forward = 0
 	depth = 0
 	for i in range(0, len(instructions), 2):
 		instruction = instructions[i]
 		measurement = int(instructions[i + 1])
-		if instruction == 'forward':
+		if instruction == FORWARD:
 			forward += measurement
-		elif instruction == 'down':
+		elif instruction == DOWN:
 			depth += measurement
-		elif instruction == 'up':
+		elif instruction == UP:
 			depth -= measurement
 			
-	return forward*depth
+	return forward * depth
 
 def execute_move_with_aim(instructions):
 	forward = 0
@@ -22,15 +26,15 @@ def execute_move_with_aim(instructions):
 	for i in range(0, len(instructions), 2):
 		instruction = instructions[i]
 		measurement = int(instructions[i + 1])
-		if instruction == 'forward':
+		if instruction == FORWARD:
 			forward += measurement
 			depth += measurement * aim
-		elif instruction == 'down':
+		elif instruction == DOWN:
 			aim += measurement
-		elif instruction == 'up':
+		elif instruction == UP:
 			aim -= measurement
 			
-	return forward*depth
+	return forward * depth
 
 if __name__ == "__main__":
 	f = open('input.txt', 'r')
