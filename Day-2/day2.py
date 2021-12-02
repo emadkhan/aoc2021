@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 
 def execute_move(instructions):
 	forward = 0
