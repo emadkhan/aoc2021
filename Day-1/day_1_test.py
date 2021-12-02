@@ -1,4 +1,4 @@
-from day_1 import count_increases
+from day_1 import count_increases, count_sliding_window_increases
 import unittest
 
 class TestSum(unittest.TestCase):
@@ -11,6 +11,15 @@ class TestSum(unittest.TestCase):
 	
 	def test_increases(self):
 		self.assertEqual(count_increases([199,200,208,210,200,207,240,269,260,263]), 7, "Should count increases")
+	
+	def test_sliding_window_empty(self):
+		self.assertEqual(count_sliding_window_increases([]), 0, "Should be 0 for empty list")
+
+	def test_sliding_window_no_increases(self):
+		self.assertEqual(count_sliding_window_increases([5,5,5]), 0, "Should be 0 for too small an input list")
+	
+	def test_sliding_window_increases(self):
+		self.assertEqual(count_sliding_window_increases([199,200,208,210,200,207,240,269,260,263]), 5, "Should count increases")
 
 if __name__ == '__main__':
 	unittest.main()
