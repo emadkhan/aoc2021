@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python3
 
 def count_increases(readings):
 	if len(readings) < 2:
