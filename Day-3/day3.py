@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
 """
+======
+PART 1
+======
+
 Defining the Problem:
 
 	* The input is binary numbers all of the same binary string length
@@ -16,7 +20,7 @@ Options:
 
 def calculate_power_consumption(readings):
 	gamma_rate = ""
-	epsilon_rate = "" # We can actually just record the gamma rate and have the epsilon rate be the flipped bit
+	epsilon_rate = "" 
 
 	for bit_index in range(0, len(readings[0])):
 		count_zero = 0
@@ -34,13 +38,66 @@ def calculate_power_consumption(readings):
 		else:
 			gamma_rate += '1'
 			epsilon_rate += '0'
-	print("Gamma Rate: {0}, Epsilon Rate: {1}".format(gamma_rate, epsilon_rate))
 
 	return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
+"""
+======
+PART 2
+======
+
+Defining the Problem
+
+	* Similar to Part1, we need to iterate column wise for a list of input.
+	* However, now the input list keeps shrinking
+	* For each bit, it branches into two different lines of processing. One for oxygen rating, the other for scrubber rating.
+"""
+
+def calculate_life_support_rating(readings):
+	oxygen_rating = calculate_rating(readings.copy(), "OXYGEN")
+	scrubbing_rating = calculate_rating(readings.copy(), "SCRUBBING")
+	print("Oxygen: {0}, Scrubbing: {1}".format(oxygen_rating, scrubbing_rating))
+	
+	return int(oxygen_rating, 2) * int(scrubbing_rating, 2)
+
+
+def calculate_rating(readings, mode):
+	bit_index = 0
+	while len(readings) > 1:
+		readings_by_index = {
+			"0": [],
+			"1": []
+		}
+
+		for i in range(0, len(readings)):
+			reading = readings[i]
+			bit_reading = reading[bit_index]
+			if bit_reading == '0':
+				readings_by_index['0'].append(reading)
+			elif bit_reading == '1':
+				readings_by_index['1'].append(reading)
+
+		bit_1_count = len(readings_by_index["1"])
+		bit_0_count = len(readings_by_index["0"])
+
+		if mode == "OXYGEN":
+			if bit_1_count > bit_0_count or bit_1_count == bit_0_count:
+				readings = readings_by_index["1"]
+			else:
+				readings = readings_by_index["0"]
+		else:
+			if bit_0_count < bit_1_count or bit_0_count == bit_1_count:
+				readings = readings_by_index["0"]
+			else:
+				readings = readings_by_index["1"]
 			
+
+		bit_index += 1
+
+	return readings[0]
+	
 
 if __name__ == "__main__":
 	f = open("input.txt", "r")
 	readings = f.read().splitlines()
-	print(calculate_power_consumption(readings))
+	print("Part 1: {0}, Part 2: {1}".format(calculate_power_consumption(readings), calculate_life_support_rating(readings)))
