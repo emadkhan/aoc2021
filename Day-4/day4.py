@@ -15,10 +15,6 @@ def build_boards(boards_input):
 
 	return boards
 
-def calculate_final_score(draws, boards):
-	result = get_winning_board_and_draw(draws, boards)
-	return result[0] * get_unmarked_numbers_sum(result[1])
-
 def get_unmarked_numbers_sum(board):
 	sum = 0
 	for row in board:
@@ -27,15 +23,27 @@ def get_unmarked_numbers_sum(board):
 				sum += col['val']
 	return sum
 
-def get_winning_board_and_draw(draws, boards):
+def calculate_final_score(draws, boards):
+	winner_boards_count = 0
+	winner_boards_index = [0 for i in range(0, len(boards))]
+	is_first_board_winner = True
+	result = {'Part1': {}, 'Part2': {}}
 	for draw in draws:
-		for board in boards:
+		for idx, board in enumerate(boards):
 			for row in board:
 				for col in row:
 					if col['val'] == draw:
 						col['marked'] = True
 						if is_board_winner(board):
-							return (draw, board)
+							if is_first_board_winner:
+								result['Part1']['result'] = draw * get_unmarked_numbers_sum(board)
+								is_first_board_winner = False
+							if winner_boards_count == len(boards) - 1 and winner_boards_index[idx] == 0:
+								result['Part2']['result'] = draw * get_unmarked_numbers_sum(board)
+								return result 
+							if winner_boards_index[idx] == 0:
+								winner_boards_index[idx] = 1	
+								winner_boards_count += 1
 
 def is_board_winner(board):
 	# Check for Row Winner
@@ -60,11 +68,16 @@ def is_board_winner(board):
 
 	return False
 				
-
-if __name__ == "__main__":
-	f = open("input.txt", "r")
+def get_draws_and_boards(filename):
+	f = open(filename, "r")
 	input = f.read().splitlines()
 	draws = [int(x) for x in input[0].split(',')]
 	boards = build_boards(input[1:])
-	print(calculate_final_score(draws, boards))
+	f.close()
+	return (draws, boards)
+
+if __name__ == "__main__":
+	draws_and_boards = get_draws_and_boards("input.txt")
+	result = calculate_final_score(draws_and_boards[0], draws_and_boards[1])
+	print("Part1: {0}, Part2: {1}".format(result['Part1'], result['Part2']))
 	
