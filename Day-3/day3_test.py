@@ -9,6 +9,12 @@ class Test(unittest.TestCase):
 		test_input = f.read().splitlines()
 		self.assertEqual(calculate_power_consumption(test_input), 198, "Correct product")
 		f.close()
+	
+	def test_life_support_rating(self):
+		f = open("test_input.txt", "r")
+		test_input = f.read().splitlines()
+		self.assertEqual(calculate_life_support_rating(test_input), 230, "Correct product")
+		f.close()
 
 if __name__ == "__main__":
 	unittest.main()

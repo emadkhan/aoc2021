@@ -1,22 +1,10 @@
 #!/usr/bin/python3
 
-"""
-======
-PART 1
-======
+ZERO = '0' 
+ONE = '1' 
 
-Defining the Problem:
-
-	* The input is binary numbers all of the same binary string length
-	* For each column, starting from left to right, calculate the occurences of 0 and 1
-	* Once you have this data for a column, the Gamma rate is the most common bit and the Epsilon rate is the least common bit
-	* For each column, record the Gamma rate and the Epsilon rate so that by the end you have 2 new binary numbers for Gamma, Epsilon
-	* Convert these two numbers to Decimal, multiply them and this is the answer
-
-
-Options:
-	* O(n * m) where n is the size of input and m is the length of each binary reading
-"""
+OXYGEN_RATING_MODE = "OXYGEN"
+SCRUBBING_RATING_MODE = "SCRUBBING"
 
 def calculate_power_consumption(readings):
 	gamma_rate = ""
@@ -27,36 +15,24 @@ def calculate_power_consumption(readings):
 		count_one = 0
 		for i in range(0, len(readings)):
 			bit_reading = readings[i][bit_index]
-			if bit_reading == '0':
+			if bit_reading == ZERO:
 				count_zero += 1
-			elif bit_reading == '1':
+			elif bit_reading == ONE:
 				count_one += 1
 		
 		if count_zero > count_one:
-			gamma_rate += '0'
-			epsilon_rate += '1'
+			gamma_rate += ZERO
+			epsilon_rate += ONE
 		else:
-			gamma_rate += '1'
-			epsilon_rate += '0'
+			gamma_rate += ONE
+			epsilon_rate += ZERO
 
 	return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
-"""
-======
-PART 2
-======
-
-Defining the Problem
-
-	* Similar to Part1, we need to iterate column wise for a list of input.
-	* However, now the input list keeps shrinking
-	* For each bit, it branches into two different lines of processing. One for oxygen rating, the other for scrubber rating.
-"""
 
 def calculate_life_support_rating(readings):
-	oxygen_rating = calculate_rating(readings.copy(), "OXYGEN")
-	scrubbing_rating = calculate_rating(readings.copy(), "SCRUBBING")
-	print("Oxygen: {0}, Scrubbing: {1}".format(oxygen_rating, scrubbing_rating))
+	oxygen_rating = calculate_rating(readings.copy(), OXYGEN_RATING_MODE)
+	scrubbing_rating = calculate_rating(readings.copy(), SCRUBBING_RATING_MODE)
 	
 	return int(oxygen_rating, 2) * int(scrubbing_rating, 2)
 
@@ -65,31 +41,31 @@ def calculate_rating(readings, mode):
 	bit_index = 0
 	while len(readings) > 1:
 		readings_by_index = {
-			"0": [],
-			"1": []
+			ZERO: [],
+			ONE: []
 		}
 
 		for i in range(0, len(readings)):
 			reading = readings[i]
 			bit_reading = reading[bit_index]
-			if bit_reading == '0':
-				readings_by_index['0'].append(reading)
-			elif bit_reading == '1':
-				readings_by_index['1'].append(reading)
+			if bit_reading == ZERO:
+				readings_by_index[ZERO].append(reading)
+			elif bit_reading == ONE:
+				readings_by_index[ONE].append(reading)
 
-		bit_1_count = len(readings_by_index["1"])
-		bit_0_count = len(readings_by_index["0"])
+		bit_1_count = len(readings_by_index[ONE])
+		bit_0_count = len(readings_by_index[ZERO])
 
 		if mode == "OXYGEN":
 			if bit_1_count > bit_0_count or bit_1_count == bit_0_count:
-				readings = readings_by_index["1"]
+				readings = readings_by_index[ONE]
 			else:
-				readings = readings_by_index["0"]
+				readings = readings_by_index[ZERO]
 		else:
 			if bit_0_count < bit_1_count or bit_0_count == bit_1_count:
-				readings = readings_by_index["0"]
+				readings = readings_by_index[ZERO]
 			else:
-				readings = readings_by_index["1"]
+				readings = readings_by_index[ONE]
 			
 
 		bit_index += 1
