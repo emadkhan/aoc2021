@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-emad@Emads-MacBook-Pro Day-7 % time ./day7.py
+~ time ./day7.py
 98925151.0
 ./day7.py  0.87s user 0.01s system 99% cpu 0.888 total
 """
