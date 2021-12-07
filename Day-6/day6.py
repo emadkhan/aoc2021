@@ -2,6 +2,20 @@
 
 from linked_list import * 
 
+def model_growth_2(colony, days):
+	# I didn't figure this out myself. Didn't have the buckets insight. Copied from 
+	# https://github.com/mahakaal/adventofcode/blob/main/2021/day6/day6.py
+	
+	age_count_buckets = [colony.count(age) for age in range(9)]
+	while days > 0:
+		zero_age_count = age_count_buckets[0]
+		age_count_buckets[:-1] = age_count_buckets[1:]
+		age_count_buckets[6] += zero_age_count
+		age_count_buckets[8] = zero_age_count
+		days -= 1
+	return sum(age_count_buckets)
+
+
 def model_growth(colony, days):
 	colony_list = LinkedList()
 	for entry in colony:
@@ -31,7 +45,7 @@ def parse_input(filename):
 
 if __name__ == "__main__":
 	input = parse_input("input.txt")
-	print(model_growth(input, 80))
+	print(model_growth_2(input, 256))
 	
 
 
