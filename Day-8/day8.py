@@ -2,59 +2,6 @@
 
 import string
 
-
-"""
-
-Distilled:
-	* Seven segment display is used to display one digit
-	* ? What is the four digit display ?
-	* The seven segments are labeled a-g. When a is turned on, the top line segment is drawn with all a's
-	* Complication: Signals wires a-g would correspond to segment lines a-g being turned on but they are mixed up
-		* So instead of relying on signal wire a, you must instead work backwards from what you know about how digits are constructed
-		* using the number of line segments
-	* Complication: Even if you figured out how one wire-signal is scrambled for one 4 digit display, each display is uniquely scrambled
-		* However, within one 4 digit display they are consistent in how they are scrambled
-	* If wire signal b/g are turned on it doesn't mean line segment b/g are meant to be turned on. You know that the number 1 uses 2 line segments			* So it is more likely that c/f was meant to be turned on. But even if you know its 1, you don't know if b maps to c or f and same for g	* There are 10 unique signal patterns corresponding to digits 0-9
-	* The input is 10 observations of signal patters, a | delimetter and then
-
-Insight:
-	* Remember, its not the actual letters that matter, its the number of letters. When you see 'gc' or 'cg', because these are 2 letters, they
-		* must be actually trying to render 'cf' which is the digit 1
-
-Part 2
-
-Insights
-	* Need to take advantage of the fact that 1,4,7,8 have unique counts.
-		* This means that 1 is usually c,f but if for a line we see ab then we know that a is either c or f
-		* We just need more clues to dial it in
-	* 4 is the only number aside from 1 which doesn't have top line
-
-Steps
-	* Get top line from 1-7
-	* Get bottom line by adding top line to 4. Then find all the segments that have length of 6. Find the one which has only
-		* one letter different from your 4 + bottom. The differnce between these is the bottom line. And this segment is 9
-
-Rough
-	* Top line = 1 - 7
-	* Top Right line = 5 - 9
-	* Top Left line = (3 + bottom_left) - 8
-	* Center line = 0 - 8
-	* Bottom Left line = 8 - 9
-	* Bottom Right line = (4 + top + bottom) - 3
-	* Bottom line = (4 + (1-7)) - 9
-
-Rough
-	* The difference between 4 (bcdf) and 7 (acf) gives you left line and center but you dont know which is which (bd)
-	* 4 + 7 segments gives you an almost 9. All you are missing is the bottom line 
-	
-
-Questions
-	* ??? How do we figure out the mapping ???
-	* ? How do we even represent the mapping?
-
-
-"""
-
 DIGIT_MAP = {
 	0: 'abcefg',
 	1: 'cf',
@@ -77,7 +24,6 @@ def count_digits_part_2(readings):
 		DIGIT_LEN_LOOKUP[len(DIGIT_MAP[key])] = key
 		DIGIT_MAP_REVERSE[''.join(sorted(DIGIT_MAP[key]))] = key
 
-	#TODO change loop len
 	for reading in readings:
 		known_digits = {}
 		new_mappings = {}
@@ -104,6 +50,7 @@ def count_digits_part_2(readings):
 			maybe_bottom = set(entry) - (set(known_digits[7]) | set(known_digits[4]))
 			if len(maybe_bottom) == 1:
 				new_mappings['g'] = maybe_bottom.pop()
+				# We are looking at 9 digit
 				known_digits[9] = set(entry)
 				
 
