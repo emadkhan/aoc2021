@@ -1,34 +1,9 @@
 #!/usr/bin/python3
 
-"""
-
-Notes:
-	* Output - Total Flashes after 100 steps
-	* Input - 2d array with the each element being the energy level
-	* Input - 100 elements in a 10x10 2d array
-	* Input - Energy levels >= 0 and <= 9
-	* R0 - Run n steps
-	* R1 - With each step, every element's energy level is incremented
-	* R2 - When an element reaches 10, it Flashes and goes back to 0
-	* R3 - An Element can only Flash once per step
-	* R4 - Flash of an Element causes an increment of Adjacent and Diagonal elements as well
-	* R5 - If a FLash causes an Adjacent Flash then this can cause Cascading Flashes
-	* R6 - Given an nth step, if cascading flashes occur then the Matrix has changed even before n+1 runs.
-
-Algo:
-	* For n in N steps, iterate through each step
-	* For nth step, increment element.
-	* If element > 9, then call flash() on adjancent and diagonal elements.
-	* flash()
-		* if element is Out of Bounds, then skip
-		* if element is already 10 then skip
-		* if element is < 10 then skip
-		* else increment this element and flash adjacent and diagonal 
-"""
-
-def simulate(input, steps):
+def simulate_p1(input, steps):
 	flashes = 0
 	for n in range(0, steps):
+		step_flashes = 0
 		for i in range(0, len(input)):
 			for j in range(0, len(input[i])):
 				input[i][j] += 1
@@ -38,10 +13,33 @@ def simulate(input, steps):
 		for i in range(0, len(input)):
 			for j in range(0, len(input[i])):
 				if input[i][j] > 9:
-					flashes += flash_and_cascade(input, i, j, flashed) 
+					step_flashes += flash_and_cascade(input, i, j, flashed) 
+		
+		flashes += step_flashes
 	
 	return flashes
 					
+def simulate_p2(input):
+	target = len(input) * len(input[0])	
+
+	step = 0
+	while True:
+		step_flashes = 0
+		for i in range(0, len(input)):
+			for j in range(0, len(input[i])):
+				input[i][j] += 1
+		
+		flashed = set()
+
+		for i in range(0, len(input)):
+			for j in range(0, len(input[i])):
+				if input[i][j] > 9:
+					step_flashes += flash_and_cascade(input, i, j, flashed)
+
+		if step_flashes == target:
+			return step + 1
+		
+		step += 1		
 		
 def flash_and_cascade(input, x, y, flashed):
 	if x == - 1 or x == len(input) or y == -1 or y == len(input[x]):
@@ -89,5 +87,5 @@ def parse_input(filename):
 
 if __name__ == '__main__':
 	input = parse_input('input.txt')
-	print(simulate(input, 100))
+	print(simulate_p2(input))
 	
