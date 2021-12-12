@@ -1,15 +1,5 @@
 #!/usr/bin/python3
 
-"""
-
-Part2
-
-Notes:
-	* At each node we have to make a decision
-	* Either don't use up small cave revisit or use it up
-"""
-
-
 import string
 
 class Node:
@@ -62,11 +52,6 @@ def explore(node, path, g, can_revisit):
 
 	if node.is_small_cave and node.data in path and not can_revisit:
 		return
-
-	# At this point either we are
-		# 1. Large cave
-		# 2. First time small cave
-		# 3. Small cave Revisited
 
 	if can_revisit and node.is_small_cave and node.data in path:
 		can_revisit = False	
