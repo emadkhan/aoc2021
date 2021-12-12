@@ -1,5 +1,15 @@
 #!/usr/bin/python3
 
+"""
+
+Part2
+
+Notes:
+	* At each node we have to make a decision
+	* Either don't use up small cave revisit or use it up
+"""
+
+
 import string
 
 class Node:
@@ -26,9 +36,6 @@ class Graph:
 
 	def add_node(self, node):
 		self.nodes.append(node)
-
-	def print_paths(self):
-		pass
 	
 	def add_node(self, node):
 		self.nodes[node.data] = node
@@ -38,25 +45,36 @@ def calculate_paths(input):
 	start = g.nodes['start']
 
 	for edge in start.edges:
-		explore(edge, ['start'], g)
+		explore(edge, ['start'], g, True)
 	
 	print(len(g.paths))
 		
 
-def explore(node, path, g):
+def explore(node, path, g, can_revisit):
 	if node.data == 'end':
 		path.append(node.data)
 		g.paths.append(','.join(path))
 		path.pop()
 		return
-	
-	if node.is_small_cave and node.data in path:
+
+	if node.data == 'start':
 		return
+
+	if node.is_small_cave and node.data in path and not can_revisit:
+		return
+
+	# At this point either we are
+		# 1. Large cave
+		# 2. First time small cave
+		# 3. Small cave Revisited
+
+	if can_revisit and node.is_small_cave and node.data in path:
+		can_revisit = False	
 
 	path.append(node.data)
 	
 	for edge in node.edges:
-		explore(edge, path, g)
+		explore(edge, path, g, can_revisit)
 
 	path.pop()
 
@@ -102,6 +120,5 @@ def parse_input(filename):
 
 if __name__ == '__main__':
 	input = parse_input('input.txt')
-	#input = parse_input('input.txt')
 	calculate_paths(input)
 	
