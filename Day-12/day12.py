@@ -37,7 +37,7 @@ def calculate_paths(input):
 	for edge in start.edges:
 		explore(edge, ['start'], g, True)
 	
-	print(len(g.paths))
+	return len(g.paths)
 		
 
 def explore(node, path, g, can_revisit):
@@ -105,5 +105,5 @@ def parse_input(filename):
 
 if __name__ == '__main__':
 	input = parse_input('input.txt')
-	calculate_paths(input)
+	print(calculate_paths(input))
 	
