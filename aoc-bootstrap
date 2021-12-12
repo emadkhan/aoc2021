@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+day=$1
+mkdir ./Day-$1
+cp ./bootstrap-python-file.py ./Day-$1/day$1.py
+touch ./Day-$1/input.txt
+touch ./Day-$1/test_input.txt
+chmod u+x ./Day-$1/day$1.py
+
+
