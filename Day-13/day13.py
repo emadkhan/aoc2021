@@ -5,14 +5,14 @@ def solve(dots, folds):
 	fill_matrix(matrix, dots)
 	for fold in folds:
 		if fold[0] == 'x':
-			print("Folding x at {}".format(fold[1]))
 			matrix = fold_x(matrix, fold[1])	
 		elif fold[0] == 'y':
-			print("Folding y at {}".format(fold[1]))
 			matrix = fold_y(matrix, fold[1])	
-	result = 0	
+	part_1_result = 0	
 	for row in matrix:
-		result += row.count(1)
+		part_1_result += row.count(1)
+	
+	# Part 2
 	letters_matrix = [['.' for x in range(0, len(matrix[0]))] for y in range(len(matrix))]
 	for i in range(0, len(matrix)):
 		for j in range(0, len(matrix[0])):
@@ -22,7 +22,7 @@ def solve(dots, folds):
 	for row in letters_matrix:
 		print(row)
 	print("")
-	return result
+	return part_1_result
 		
 
 def fold_x(matrix, position):
