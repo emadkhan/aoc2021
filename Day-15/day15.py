@@ -48,7 +48,6 @@ def get_neighbours(input, i, j):
 
 def expand_input(input):
 	result = []
-	# Build Columns
 	for i in range(0, 5):
 		to_add = [[y + i if y + i < 10 else (y + i) % 9 for y in x] for x in input]
 		for row in to_add:
@@ -57,10 +56,8 @@ def expand_input(input):
 	for idx in range(0, len(base_tile)):
 		row = base_tile[idx]
 		for i in range(1, 5):
-			#print("Row: {}".format(row))
 			extend_with = [x + i if x + i < 10 else (x + i) % 9 for x in row]
 
-			#print("Extending with: {}".format(extend_with))
 			result[idx].extend(extend_with)
 
 	return result
@@ -69,8 +66,6 @@ def parse_input(filename):
 	f = open(filename)
 	input = f.read().splitlines()
 	parsed = [[int(y) for y in list(x)] for x in input]
-	#parsed = [[1, 1, 6, 3], [1, 3, 8, 1], [2, 1, 3, 6]]
-	#parsed = [[3, 8, 1], [1, 3, 6]]
 	f.close()
 	return parsed 
 
