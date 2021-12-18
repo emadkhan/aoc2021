@@ -1,11 +1,21 @@
 #!/usr/bin/python3
 
+LOWEST = -1000
+HIGHEST = 1000
+
 def solve_brute(target_area):
-	highest = -1
-	for i in range(-1000, 1000):
-		for j in range(-1000, 1000):
-			highest = max(highest, simulate([i, j], target_area))
-	return highest
+	highest = LOWEST 
+	target_hit = 0
+	worked = []
+	for i in range(LOWEST, HIGHEST):
+		for j in range(LOWEST, HIGHEST):
+			high = simulate([i, j], target_area)
+			if high == LOWEST:
+				continue
+			worked.append((i, j))
+			highest = max(highest, high)
+			target_hit += 1
+	return (highest, target_hit)
 
 
 # Tried to be clever. This works for the test input but not for the real input.
@@ -17,7 +27,7 @@ def solve(target_area):
 		vel_y = 0
 		while True:
 			high = simulate([vel_x, vel_y], target_area)
-			if high == -1:
+			if high == LOWEST:
 				break
 			#print("Vel x: {0}, Vel y: {1}".format(vel_x, vel_y))
 			highest = max(high, highest)	
@@ -46,14 +56,14 @@ def simulate(velocity, target_area):
 			#print("x short circuit x velocity > 0")
 			#print("X: {0} Y: {1}".format(x, y))
 			#print("Velocity", velocity)
-			return -1
+			return LOWEST 
 	
 		# If Velocity x is 0 then if it hasn't already reached target then it never will, it cannot drop into 
 		if velocity[0] <= 0 and (x < target_area['x'][0] or x > target_area['x'][1]):
 			#print("x short circuit x velocity == 0")
 			#print("X: {0} Y: {1}".format(x, y))
 			#print("Velocity", velocity)
-			return -1 
+			return LOWEST 
 
 
 		# If y is already below the target y lower bound and velocity y < 0 then it cannot come back up
@@ -61,12 +71,13 @@ def simulate(velocity, target_area):
 			#print("y short circuit")
 			#print("X: {0} Y: {1}".format(x, y))
 			#print("Velocity", velocity)
-			return -1 
+			return LOWEST 
 	
 
 		# Evaluate Target 
 
 		if x >= target_area['x'][0] and x <= target_area['x'][1] and y <= target_area['y'][1] and y >= target_area['y'][0]:
+			#print("Found")	
 			#print("X: {0} Y: {1}".format(x, y))
 			#print("Velocity", velocity)
 			return max(y_positions)
@@ -86,8 +97,6 @@ def simulate(velocity, target_area):
 			velocity[0] += 1
 		
 		velocity[1] -= 1
-		
-
 
 def parse_input(filename):
 	f = open(filename)
@@ -101,13 +110,13 @@ def parse_input(filename):
 	result = {}
 	result['x'] = (int(x_target_start), int(x_target_end))
 	result['y'] = (int(y_target_start), int(y_target_end))
-	#print(result)
+	print(result)
 	f.close()
 	return result 
 
 if __name__ == '__main__':
 	#input = parse_input('test_input.txt')
 	input = parse_input('input.txt')
-	#print("Running")
+	print("Running")
 	print(solve_brute(input))
 
