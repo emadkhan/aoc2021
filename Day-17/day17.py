@@ -6,13 +6,11 @@ HIGHEST = 1000
 def solve_brute(target_area):
 	highest = LOWEST 
 	target_hit = 0
-	worked = []
 	for i in range(LOWEST, HIGHEST):
 		for j in range(LOWEST, HIGHEST):
 			high = simulate([i, j], target_area)
 			if high == LOWEST:
 				continue
-			worked.append((i, j))
 			highest = max(highest, high)
 			target_hit += 1
 	return (highest, target_hit)
